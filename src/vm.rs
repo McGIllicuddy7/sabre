@@ -1,9 +1,11 @@
 use std::ops::Not;
 
+use serde::{Deserialize, Serialize};
+
 use crate::memory::Memory;
 
 #[repr(u8)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
 pub enum Register {
     BP,
     SP,
@@ -13,16 +15,28 @@ pub enum Register {
     R2,
     R3,
     R4,
+    R5,
+    R6,
+    R7,
+    R8,
     S0,
     S1,
     S2,
     S3,
     S4,
+    S5,
+    S6,
+    S7,
+    S8,
     B0,
     B1,
     B2,
     B3,
     B4,
+    B5,
+    B6,
+    B7,
+    B8,
 }
 impl Register {
     pub fn get_index(&self) -> usize {
@@ -35,16 +49,28 @@ impl Register {
             Self::R2 => 5,
             Self::R3 => 6,
             Self::R4 => 7,
+            Self::R5 => 8,
+            Self::R6 => 9,
+            Self::R7 => 10,
+            Self::R8 => 11,
             Self::S0 => 3,
             Self::S1 => 4,
             Self::S2 => 5,
             Self::S3 => 6,
             Self::S4 => 7,
+            Self::S5 => 8,
+            Self::S6 => 9,
+            Self::S7 => 10,
+            Self::S8 => 11,
             Self::B0 => 3,
             Self::B1 => 4,
             Self::B2 => 5,
             Self::B3 => 6,
             Self::B4 => 7,
+            Self::B5 => 8,
+            Self::B6 => 9,
+            Self::B7 => 10,
+            Self::B8 => 11,
         }
     }
 
@@ -58,16 +84,28 @@ impl Register {
             Self::R2 => 4,
             Self::R3 => 4,
             Self::R4 => 4,
+            Self::R5 => 4,
+            Self::R6 => 4,
+            Self::R7 => 4,
+            Self::R8 => 4,
             Self::S0 => 2,
             Self::S1 => 2,
             Self::S2 => 2,
             Self::S3 => 2,
             Self::S4 => 2,
+            Self::S5 => 2,
+            Self::S6 => 2,
+            Self::S7 => 2,
+            Self::S8 => 2,
             Self::B0 => 1,
             Self::B1 => 1,
             Self::B2 => 1,
             Self::B3 => 1,
             Self::B4 => 1,
+            Self::B5 => 1,
+            Self::B6 => 1,
+            Self::B7 => 1,
+            Self::B8 => 1,
         }
     }
 
@@ -81,16 +119,28 @@ impl Register {
             Self::R2 => u32::MAX as u64 + 1,
             Self::R3 => u32::MAX as u64 + 1,
             Self::R4 => u32::MAX as u64 + 1,
+            Self::R5 => u32::MAX as u64 + 1,
+            Self::R6 => u32::MAX as u64 + 1,
+            Self::R7 => u32::MAX as u64 + 1,
+            Self::R8 => u32::MAX as u64 + 1,
             Self::S0 => u16::MAX as u64 + 1,
             Self::S1 => u16::MAX as u64 + 1,
             Self::S2 => u16::MAX as u64 + 1,
             Self::S3 => u16::MAX as u64 + 1,
             Self::S4 => u16::MAX as u64 + 1,
+            Self::S5 => u16::MAX as u64 + 1,
+            Self::S6 => u16::MAX as u64 + 1,
+            Self::S7 => u16::MAX as u64 + 1,
+            Self::S8 => u16::MAX as u64 + 1,
             Self::B0 => u8::MAX as u64 + 1,
             Self::B1 => u8::MAX as u64 + 1,
             Self::B2 => u8::MAX as u64 + 1,
             Self::B3 => u8::MAX as u64 + 1,
             Self::B4 => u8::MAX as u64 + 1,
+            Self::B5 => u8::MAX as u64 + 1,
+            Self::B6 => u8::MAX as u64 + 1,
+            Self::B7 => u8::MAX as u64 + 1,
+            Self::B8 => u8::MAX as u64 + 1,
         }
     }
     pub fn from(value: u8) -> Self {
@@ -103,22 +153,34 @@ impl Register {
             5 => Self::R2,
             6 => Self::R3,
             7 => Self::R4,
-            8 => Self::S0,
-            9 => Self::S1,
-            10 => Self::S2,
-            11 => Self::S3,
-            12 => Self::S4,
-            13 => Self::B0,
-            14 => Self::B1,
-            15 => Self::B2,
-            16 => Self::B3,
-            17 => Self::B4,
+            8 => Self::R5,
+            9 => Self::R6,
+            10 => Self::R7,
+            11 => Self::R8,
+            12 => Self::S0,
+            13 => Self::S1,
+            14 => Self::S2,
+            15 => Self::S3,
+            16 => Self::S4,
+            17 => Self::S5,
+            18 => Self::S6,
+            19 => Self::S7,
+            20 => Self::S8,
+            21 => Self::B0,
+            22 => Self::B1,
+            23 => Self::B2,
+            24 => Self::B3,
+            25 => Self::B4,
+            26 => Self::B5,
+            27 => Self::B6,
+            28 => Self::B7,
+            29 => Self::B8,
             _ => Self::R0,
         }
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
 pub enum InstructionKind {
     Nop,
     MoveConst,
@@ -155,7 +217,17 @@ pub enum InstructionKind {
     And,
     Or,
     Xor,
+    Svc,
     Halt,
+    LoadRegOffset,
+    StoreRegOffset,
+    Inc,
+    Dec,
+    Test,
+    IncWord,
+    DecWord,
+    IncDW,
+    DecDW,
 }
 impl InstructionKind {
     pub fn from(value: u8) -> Self {
@@ -183,9 +255,9 @@ impl InstructionKind {
             20 => CmpL,
             21 => CmpG,
             22 => CmpE,
-            23 => CmpL,
-            24 => CmpG,
-            25 => CmpE,
+            23 => ICmpL,
+            24 => ICmpG,
+            25 => ICmpE,
             26 => Branch,
             27 => Jmp,
             28 => Call,
@@ -196,13 +268,23 @@ impl InstructionKind {
             33 => And,
             34 => Or,
             35 => Xor,
-            36 => Halt,
+            36 => Svc,
+            37 => Halt,
+            38 => LoadRegOffset,
+            39 => StoreRegOffset,
+            40 => Inc,
+            41 => Dec,
+            42 => Test,
+            43 => IncWord,
+            44 => DecWord,
+            45 => IncDW,
+            46 => DecDW,
             _ => Nop,
         }
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
 pub struct Instruction {
     pub kind: InstructionKind,
     //dest register
@@ -211,18 +293,16 @@ pub struct Instruction {
     pub r2: Register,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Vm {
     pub memory: Memory,
-    pub vram: [u8; 640 * 480],
-    pub register_file: [u32; 8],
+    pub register_file: [u32; 12],
 }
 
 impl Vm {
     pub fn new() -> Self {
         Self {
             memory: Memory::new(),
-            vram: [0; _],
             register_file: [0; _],
         }
     }
@@ -338,8 +418,8 @@ impl Vm {
                 self.register_store(ins.r0, value);
             }
             InstructionKind::Store => {
-                let addr = self.register_get(ins.r0);
-                let value = self.register_get(ins.r1);
+                let addr = self.register_get(ins.r1);
+                let value = self.register_get(ins.r0);
                 match ins.r1.get_size_bytes() {
                     4 => {
                         self.memory_write(addr, value);
@@ -363,12 +443,10 @@ impl Vm {
                 self.register_store(ins.r0, value);
             }
             InstructionKind::StoreOffset => {
-                let address = self.register_get(ins.r0);
+                let address = self.register_get(ins.r1);
                 let offset = self.next_instruction_data().cast_signed();
                 let addr = address.wrapping_add_signed(offset);
-                let value = self.register_get(ins.r1);
-
-                self.register_store(ins.r0, value);
+                let value = self.register_get(ins.r0);
                 match ins.r1.get_size_bytes() {
                     4 => {
                         self.memory_write(addr, value);
@@ -516,7 +594,65 @@ impl Vm {
                 let v = v1 ^ v2;
                 self.register_store(ins.r0, v);
             }
+            InstructionKind::Svc => {
+                todo!()
+            }
             InstructionKind::Halt => todo!(),
+            InstructionKind::LoadRegOffset => {
+                let address = self.register_get(ins.r1);
+                let offset = self.register_get(ins.r2).cast_signed();
+                let addr = address.wrapping_add_signed(offset);
+                let value = self.memory_read(addr);
+                self.register_store(ins.r0, value);
+            }
+            InstructionKind::StoreRegOffset => {
+                let address = self.register_get(ins.r1);
+                let offset = self.register_get(ins.r2).cast_signed();
+                let addr = address.wrapping_add_signed(offset);
+                let value = self.register_get(ins.r0);
+                match ins.r1.get_size_bytes() {
+                    4 => {
+                        self.memory_write(addr, value);
+                    }
+                    2 => {
+                        self.memory_write_word(addr, value as u16);
+                    }
+                    1 => {
+                        self.memory_write_byte(addr, value as u8);
+                    }
+                    _ => {
+                        todo!()
+                    }
+                }
+            }
+            InstructionKind::Inc => {
+                let value = self.register_get(ins.r1).wrapping_add(1);
+                self.register_store(ins.r0, value);
+            }
+            InstructionKind::Dec => {
+                let value = self.register_get(ins.r1).wrapping_sub(1);
+                self.register_store(ins.r0, value);
+            }
+            InstructionKind::Test => {
+                let value = if self.register_get(ins.r1) != 0 { 1 } else { 0 };
+                self.register_store(ins.r0, value);
+            }
+            InstructionKind::IncWord => {
+                let value = self.register_get(ins.r1).wrapping_add(2);
+                self.register_store(ins.r0, value);
+            }
+            InstructionKind::DecWord => {
+                let value = self.register_get(ins.r1).wrapping_sub(2);
+                self.register_store(ins.r0, value);
+            }
+            InstructionKind::IncDW => {
+                let value = self.register_get(ins.r1).wrapping_add(4);
+                self.register_store(ins.r0, value);
+            }
+            InstructionKind::DecDW => {
+                let value = self.register_get(ins.r1).wrapping_sub(4);
+                self.register_store(ins.r0, value);
+            }
         }
     }
 }

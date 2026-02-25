@@ -1,10 +1,14 @@
-#[derive(Clone, Copy, Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Memory {
-    pub memory: [u8; 1_000_000],
+    pub memory: Box<[u8]>,
 }
 impl Memory {
     pub fn new() -> Self {
-        Self { memory: [0; _] }
+        Self {
+            memory: vec![0; 1_000_000].into(),
+        }
     }
     pub fn memory_read(&self, address: u32) -> u32 {
         let add = address as usize;
